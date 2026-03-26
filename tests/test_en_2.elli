@@ -1,0 +1,21 @@
+FROM math_en IMPORT SQUARE
+
+DECLARE result AS NUMBER = SQUARE(4)
+DISPLAY: result
+
+DECLARE items AS STRUCT = {
+    "a": 10,
+    "b": 20
+}
+
+DECLARE keys AS LIST = STRUCT.KEYS(items)
+DISPLAY: LENGTH(keys)
+
+FOR i FROM 0 TO LENGTH(keys) - 1:
+    DECLARE k AS TEXT = keys[i]
+    DISPLAY: k
+END_FOR
+
+FILE.WRITE("tmp_en.txt", "hello")
+DECLARE content AS TEXT = FILE.READ("tmp_en.txt")
+DISPLAY: content

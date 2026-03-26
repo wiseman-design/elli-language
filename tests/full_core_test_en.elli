@@ -1,0 +1,211 @@
+COMMENT: "=== FULL CORE TEST EN: CHAT BOARD PROJECT ==="
+
+DISPLAY: "=== ELLI EN CHAT BOARD ==="
+
+CONST MAX_MESSAGES AS NUMBER = 5
+
+DECLARE room_name AS TEXT = INPUT: "Room"
+DECLARE topic_name AS TEXT = INPUT: "Topic"
+
+DECLARE room_info AS STRUCT = {
+    "room": room_name,
+    "topic": topic_name,
+    "edition": "EN",
+    "active": TRUE
+}
+
+DECLARE users AS LIST = []
+DECLARE messages AS LIST = []
+DECLARE total_messages AS NUMBER = 0
+DECLARE moderation_hits AS NUMBER = 0
+
+APPEND(users, "Alice")
+APPEND(users, "Bob")
+APPEND(users, "Charlie")
+
+APPEND(messages, {
+    "user": "Alice",
+    "text": "Hello from ELLI chat",
+    "likes": 3
+})
+
+APPEND(messages, {
+    "user": "Bob",
+    "text": "Strict typing keeps code clean",
+    "likes": 5
+})
+
+APPEND(messages, {
+    "user": "Charlie",
+    "text": "Modules will make ELLI stronger",
+    "likes": 4
+})
+
+APPEND(messages, {
+    "user": "Alice",
+    "text": "JSON and STRUCT support are useful",
+    "likes": 6
+})
+
+APPEND(messages, {
+    "user": "Bob",
+    "text": "No chaos, only structure",
+    "likes": 2
+})
+
+total_messages = LENGTH(messages)
+
+DISPLAY: "Room: " + room_info["room"]
+DISPLAY: "Topic: " + room_info["topic"]
+DISPLAY: "Edition: " + room_info["edition"]
+DISPLAY: "Active: " + room_info["active"]
+DISPLAY: "Users count: " + LENGTH(users)
+DISPLAY: "Messages count: " + total_messages
+
+DECLARE most_liked_text AS FUNCTION(a, b, c, d, e):
+    DECLARE best_text AS TEXT = a["text"]
+    DECLARE best_likes AS NUMBER = a["likes"]
+
+    IF b["likes"] > best_likes THEN:
+        best_text = b["text"]
+        best_likes = b["likes"]
+    END_IF
+
+    IF c["likes"] > best_likes THEN:
+        best_text = c["text"]
+        best_likes = c["likes"]
+    END_IF
+
+    IF d["likes"] > best_likes THEN:
+        best_text = d["text"]
+        best_likes = d["likes"]
+    END_IF
+
+    IF e["likes"] > best_likes THEN:
+        best_text = e["text"]
+        best_likes = e["likes"]
+    END_IF
+
+    RETURN best_text
+END_FUNCTION
+
+DECLARE total_likes AS FUNCTION(a, b, c, d, e):
+    DECLARE result AS NUMBER = 0
+    result = result + a["likes"]
+    result = result + b["likes"]
+    result = result + c["likes"]
+    result = result + d["likes"]
+    result = result + e["likes"]
+    RETURN result
+END_FUNCTION
+
+DECLARE count_large_like_messages AS FUNCTION(a, b, c, d, e):
+    DECLARE count AS NUMBER = 0
+
+    IF a["likes"] >= 5 THEN:
+        count = count + 1
+    END_IF
+
+    IF b["likes"] >= 5 THEN:
+        count = count + 1
+    END_IF
+
+    IF c["likes"] >= 5 THEN:
+        count = count + 1
+    END_IF
+
+    IF d["likes"] >= 5 THEN:
+        count = count + 1
+    END_IF
+
+    IF e["likes"] >= 5 THEN:
+        count = count + 1
+    END_IF
+
+    RETURN count
+END_FUNCTION
+
+DECLARE contains_clean_phrase AS FUNCTION(text):
+    IF text == "No chaos, only structure" THEN:
+        RETURN TRUE
+        ELSE:
+        RETURN FALSE
+    END_IF
+END_FUNCTION
+
+DECLARE longest_message AS TEXT = most_liked_text(
+    messages[0],
+    messages[1],
+    messages[2],
+    messages[3],
+    messages[4]
+)
+
+DECLARE likes_sum AS NUMBER = total_likes(
+    messages[0],
+    messages[1],
+    messages[2],
+    messages[3],
+    messages[4]
+)
+
+DECLARE popular_count AS NUMBER = count_large_like_messages(
+    messages[0],
+    messages[1],
+    messages[2],
+    messages[3],
+    messages[4]
+)
+
+IF contains_clean_phrase(messages[4]["text"]) THEN:
+    moderation_hits = moderation_hits + 0
+    ELSE:
+    moderation_hits = moderation_hits + 1
+END_IF
+
+DISPLAY: "=== CHAT LOG ==="
+DISPLAY: messages[0]["user"] + ": " + messages[0]["text"]
+DISPLAY: messages[1]["user"] + ": " + messages[1]["text"]
+DISPLAY: messages[2]["user"] + ": " + messages[2]["text"]
+DISPLAY: messages[3]["user"] + ": " + messages[3]["text"]
+DISPLAY: messages[4]["user"] + ": " + messages[4]["text"]
+
+DISPLAY: "=== STATS ==="
+DISPLAY: "Longest message: " + longest_message
+DISPLAY: "Total likes: " + likes_sum
+DISPLAY: "Popular messages (likes >= 5): " + popular_count
+DISPLAY: "Moderation hits: " + moderation_hits
+DISPLAY: "Max messages policy: " + MAX_MESSAGES
+
+IF total_messages == MAX_MESSAGES THEN:
+    DISPLAY: "Chat board is full."
+    ELSE:
+    DISPLAY: "Chat board still has space."
+END_IF
+
+DISPLAY: "=== USER SNAPSHOT ==="
+DISPLAY: "User 1: " + users[0]
+DISPLAY: "User 2: " + users[1]
+DISPLAY: "User 3: " + users[2]
+
+DISPLAY: "=== STRUCT CHECKS ==="
+DISPLAY: STRUCT.CONTAINS(room_info, "room")
+DISPLAY: STRUCT.CONTAINS(room_info, "missing")
+DECLARE room_keys AS LIST = STRUCT.KEYS(room_info)
+DISPLAY: LENGTH(room_keys)
+
+DISPLAY: "=== JSON DEMO ==="
+DECLARE room_json AS TEXT = JSON.TO_TEXT(room_info)
+DISPLAY: room_json
+
+DECLARE room_back AS STRUCT = JSON.FROM_TEXT(room_json)
+DISPLAY: room_back["room"]
+DISPLAY: room_back["topic"]
+
+DISPLAY: "=== FILE DEMO ==="
+FILE.WRITE("chat_report_en.txt", room_json)
+DECLARE file_text AS TEXT = FILE.READ("chat_report_en.txt")
+DISPLAY: file_text
+
+DISPLAY: "=== HTTP DEMO SKIPPED IN OFFLINE ENVIRONMENT ==="
+DISPLAY: "Project complete."

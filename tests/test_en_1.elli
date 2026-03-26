@@ -1,0 +1,26 @@
+IMPORT math_en
+
+DECLARE x AS NUMBER = 5
+DECLARE y AS NUMBER = math_en.SQUARE(x)
+DISPLAY: y
+
+DECLARE user AS STRUCT = {
+    "name": "Anna",
+    "age": 20
+}
+
+user["age"] = 21
+DISPLAY: user["age"]
+DISPLAY: STRUCT.CONTAINS(user, "name")
+DISPLAY: LENGTH(user)
+
+DECLARE initial_data AS STRUCT = {
+    "a": 1
+}
+DECLARE json_text AS TEXT = JSON.TO_TEXT(initial_data)
+DECLARE data AS STRUCT = JSON.FROM_TEXT(json_text)
+DISPLAY: data["a"]
+
+IF y == 25 THEN:
+    DISPLAY: "ok"
+END_IF
