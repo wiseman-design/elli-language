@@ -2,278 +2,461 @@
 
 ## Complete Language Reference (CORE 1.0 – 1.3)
 
-This document provides a practical and structured reference for writing code in ELLI.
-It covers the language features introduced in:
+This document defines the practical usage of the ELLI language based on the stable CORE specification.
 
-- CORE 1.0 – Fundamental Syntax & Type System
+Covered versions:
+
+- CORE 1.0 – Syntax, Type System, Execution Model
 - CORE 1.1 – File, JSON, HTTP
-- CORE 1.2 – ΔΟΜΗ (Structured Container)
-- CORE 1.3 – Modules, Visibility, Architecture
-
-This guide is written to allow a new user to start writing ELLI code immediately.
+- CORE 1.2 – ΔΟΜΗ (STRUCT)
+- CORE 1.3 – Module System
 
 ---
 
-# 1. Basic Program Structure
+# 1. Program Structure
 
-ELLI uses explicit block termination and strict typing.
+ELLI uses explicit syntax and strict typing.
 
-Example:
+## Example (EL)
 
-```
+
 ΔΗΛΩΣΕ μήνυμα ΩΣ ΚΕΙΜΕΝΟ = "Hello"
 ΕΜΦΑΝΙΣΕ: μήνυμα
-```
 
-All variables must be declared with a type.
+
+## Example (EN)
+
+
+DECLARE message AS TEXT = "Hello"
+DISPLAY: message
+
 
 ---
 
-# 2. Built-in Types
+# 2. Type System
+
+ELLI is strictly typed.
 
 ## Primitive Types
 
-| Type (EL) | Type (EN) | Description |
-|------------|------------|-------------|
-| ΑΡΙΘΜΟΣ | NUMBER | Integer numeric value |
-| ΔΕΚΑΔΙΚΟΣ | DECIMAL | Floating-point value |
-| ΚΕΙΜΕΝΟ | TEXT | String value |
+| EL | EN | Description |
+|----|----|-------------|
+| ΑΡΙΘΜΟΣ | NUMBER | Numeric value |
+| ΑΚΕΡΑΙΟΣ | INTEGER | Integer only |
+| ΔΕΚΑΔΙΚΟΣ | DECIMAL | Decimal only |
+| ΚΕΙΜΕΝΟ | TEXT | String |
 | ΛΟΓΙΚΟΣ | BOOLEAN | ΑΛΗΘΗΣ / ΨΕΥΔΗΣ |
 | ΚΕΝΟ | NULL | Absence of value |
 
-ELLI is strictly typed:
+---
 
-- No implicit conversions
-- No truthy/falsy coercion
-- Type mismatch → TypeError
+## Rules
+
+- No implicit conversions  
+- No type inference  
+- Type mismatch → TypeError  
+- Only allowed implicit behavior: TEXT concatenation  
 
 ---
 
 # 3. Variable Declaration
 
-```
-ΔΗΛΩΣΕ x ΩΣ ΑΡΙΘΜΟΣ = 10
-```
+## Syntax
 
-Declaration without explicit type is not allowed.
+
+ΔΗΛΩΣΕ x ΩΣ ΤΥΠΟΣ = τιμή
+
+
+## EN
+
+
+DECLARE x AS TYPE = value
+
+
+---
+
+## Rules
+
+- Type is mandatory  
+- Variable must be declared before use  
+- Type cannot change  
 
 ---
 
 # 4. Constants (CORE 1.3)
 
-```
+## EL
+
+
 ΣΤΑΘΕΡΑ PI ΩΣ ΔΕΚΑΔΙΚΟΣ = 3.14159
-```
 
-Rules:
 
-- Must declare type
-- Cannot be reassigned
-- Violations → TypeError
+## EN
+
+
+CONST PI AS DECIMAL = 3.14159
+
 
 ---
 
-# 5. Control Flow
+## Rules
 
-## If Condition
+- Cannot be reassigned  
+- Type must match value  
+- Violation → TypeError  
 
-```
-ΑΝ x > 5 ΤΟΤΕ:
-    ΕΜΦΑΝΙΣΕ: "Μεγαλύτερο"
+---
+
+# 5. Expressions
+
+## Allowed
+
+- NUMBER with NUMBER  
+- TEXT with TEXT  
+- TEXT with any type (concatenation)
+
+## Not Allowed
+
+- Mixed numeric and boolean  
+- Mixed incompatible types  
+
+---
+
+# 6. Input
+
+## EL
+
+
+ΔΗΛΩΣΕ όνομα ΩΣ ΚΕΙΜΕΝΟ = ΠΕΣ_ΜΟΥ: "Όνομα;"
+
+
+## EN
+
+
+DECLARE name AS TEXT = INPUT: "Name?"
+
+
+---
+
+## Typed Input
+
+## EL
+
+
+ΔΗΛΩΣΕ ηλικία ΩΣ ΑΡΙΘΜΟΣ = ΠΕΣ_ΜΟΥ.ΑΡΙΘΜΟΣ: "Ηλικία;"
+
+
+## EN
+
+
+DECLARE age AS NUMBER = INPUT.NUMBER: "Age?"
+
+
+---
+
+## Rules
+
+- Basic input returns TEXT  
+- Typed input enforces type  
+- Invalid input → TypeError  
+
+---
+
+# 7. Conditions
+
+## EL
+
+
+ΑΝ x > 10 ΤΟΤΕ:
+ΕΜΦΑΝΙΣΕ: "Μεγάλο"
+ΑΛΛΙΩΣ:
+ΕΜΦΑΝΙΣΕ: "Μικρό"
 ΤΕΛΟΣ_ΑΝ
-```
 
-## Loop
 
-```
-ΓΙΑ i ΑΠΟ 0 ΜΕΧΡΙ 10:
-    ΕΜΦΑΝΙΣΕ: i
+## EN
+
+
+IF x > 10 THEN:
+DISPLAY: "Big"
+ELSE:
+DISPLAY: "Small"
+END_IF
+
+
+---
+
+## Rules
+
+- Condition must be BOOLEAN  
+- No implicit truth evaluation  
+
+---
+
+# 8. Loops
+
+## Numeric Loop (CORE 1.0)
+
+## EL
+
+
+ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5:
+ΕΜΦΑΝΙΣΕ: i
 ΤΕΛΟΣ_ΓΙΑ
-```
 
-Blocks must close explicitly.
+
+## EN
+
+
+FOR i FROM 1 TO 5:
+DISPLAY: i
+END_FOR
+
 
 ---
 
-# 6. Functions
+## While Loop
 
-```
-ΔΗΜΟΣΙΟ ΣΥΝΑΡΤΗΣΗ ΤΕΤΡΑΓΩΝΟ(x):
-    ΕΠΙΣΤΡΕΨΕ x * x
+## EL
+
+
+ΟΣΟ x < 5 ΤΟΤΕ:
+x = x + 1
+ΤΕΛΟΣ_ΟΣΟ
+
+
+## EN
+
+
+WHILE x < 5 THEN:
+x = x + 1
+END_WHILE
+
+
+---
+
+# 9. Functions
+
+## EL
+
+
+ΔΗΛΩΣΕ ΠΡΟΣΘΕΣΕ ΩΣ ΣΥΝΑΡΤΗΣΗ(a, b):
+ΕΠΙΣΤΡΕΨΕ a + b
 ΤΕΛΟΣ_ΣΥΝΑΡΤΗΣΗ
-```
 
-Functions:
 
-- May be public or private (inside modules)
-- Follow strict return behavior
+## EN
+
+
+DECLARE ADD AS FUNCTION(a, b):
+RETURN a + b
+END_FUNCTION
+
 
 ---
 
-# 7. Lists (CORE 1.0 / 1.1)
+## Rules
 
-```
+- Must be declared before use  
+- May return value or ΚΕΝΟ  
+- RETURN terminates function  
+
+---
+
+# 10. Lists
+
+## EL
+
+
 ΔΗΛΩΣΕ λίστα ΩΣ ΛΙΣΤΑ = [1, 2, 3]
-```
 
-Nested lists allowed:
 
-```
-[[1,2],[3,4]]
-```
+## EN
 
-Access via index:
 
-```
-λίστα[0]
-```
+DECLARE list AS LIST = [1, 2, 3]
+
 
 ---
 
-# 8. ΔΟΜΗ (CORE 1.2)
+## Rules
 
-Structured key–value container.
+- Indexed access only  
+- Nested lists allowed  
 
-```
+---
+
+# 11. ΔΟΜΗ (CORE 1.2)
+
+## EL
+
+
 ΔΗΛΩΣΕ χρήστης ΩΣ ΔΟΜΗ = {
-    "όνομα": "Νίκος",
-    "ηλικία": 25
+"όνομα": "Νίκος",
+"ηλικία": 25
 }
-```
 
-Access:
 
-```
-χρήστης["όνομα"]
-```
+## EN
 
-Rules:
 
-- Keys must be TEXT
-- Values may be primitive, LIST, or ΔΟΜΗ
-- No implicit conversions
-- No direct structure comparison
+DECLARE user AS STRUCT = {
+"name": "Nick",
+"age": 25
+}
+
 
 ---
 
-# 9. File Handling (CORE 1.1)
+## Rules
 
-```
-ΔΗΛΩΣΕ περιεχόμενο ΩΣ ΚΕΙΜΕΝΟ = ΑΡΧΕΙΟ.ΑΝΑΓΝΩΣΕ("data.txt")
-ΑΡΧΕΙΟ.ΓΡΑΨΕ("data.txt", "example")
-```
-
----
-
-# 10. JSON (CORE 1.1)
-
-```
-ΔΗΛΩΣΕ δεδομένα ΩΣ ΔΟΜΗ = JSON.ΑΠΟ_ΚΕΙΜΕΝΟ(text)
-ΔΗΛΩΣΕ json ΩΣ ΚΕΙΜΕΝΟ = JSON.ΣΕ_ΚΕΙΜΕΝΟ(δεδομένα)
-```
-
-JSON maps to:
-
-- object → ΔΟΜΗ
-- array → ΛΙΣΤΑ
-- string → ΚΕΙΜΕΝΟ
-- number → ΑΡΙΘΜΟΣ
-- boolean → ΛΟΓΙΚΟΣ
-- null → ΚΕΝΟ
+- Keys must be TEXT  
+- Ordered structure  
+- Access via ["key"]  
+- No direct comparison  
 
 ---
 
-# 11. HTTP (CORE 1.1)
+# 12. File (CORE 1.1)
 
-Blocking model.
+## EL
 
-```
-ΔΗΛΩΣΕ απάντηση ΩΣ HTTP_ΑΠΑΝΤΗΣΗ = HTTP.GET("https://example.com")
-ΔΗΛΩΣΕ κωδικός ΩΣ ΑΡΙΘΜΟΣ = HTTP.ΚΩΔΙΚΟΣ(απάντηση)
-```
+
+ΔΗΛΩΣΕ content ΩΣ ΚΕΙΜΕΝΟ = ΑΡΧΕΙΟ.ΑΝΑΓΝΩΣΕ("file.txt")
+
+
+## EN
+
+
+DECLARE content AS TEXT = FILE.READ("file.txt")
+
 
 ---
 
-# 12. Modules (CORE 1.3)
+# 13. JSON (CORE 1.1)
+
+## EL
+
+
+ΔΗΛΩΣΕ data ΩΣ ΔΟΜΗ = JSON.ΑΠΟ_ΚΕΙΜΕΝΟ(text)
+
+
+## EN
+
+
+DECLARE data AS STRUCT = JSON.FROM_TEXT(text)
+
+
+---
+
+## Mapping
+
+- object → STRUCT  
+- array → LIST  
+- string → TEXT  
+- number → NUMBER  
+- boolean → BOOLEAN  
+- null → NULL  
+
+---
+
+# 14. HTTP (CORE 1.1)
+
+## EL
+
+
+ΔΗΛΩΣΕ response ΩΣ HTTP_ΑΠΑΝΤΗΣΗ = HTTP.GET(url)
+
+
+## EN
+
+
+DECLARE response AS HTTP_RESPONSE = HTTP.GET(url)
+
+
+---
+
+## Accessors
+
+## EL
+
+
+HTTP.ΚΩΔΙΚΟΣ(response)
+HTTP.ΣΩΜΑ(response)
+
+
+## EN
+
+
+HTTP.STATUS(response)
+HTTP.BODY(response)
+
+
+---
+
+# 15. Modules (CORE 1.3)
 
 ## Import
 
-```
+## EL
+
+
 ΕΙΣΑΓΕ math
-```
+
+
+## EN
+
+
+IMPORT math
+
+
+---
 
 ## Selective Import
 
-```
+## EL
+
+
 ΑΠΟ math ΕΙΣΑΓΕ ΤΕΤΡΑΓΩΝΟ
-```
 
-## Visibility
 
-- ΔΗΜΟΣΙΟ → exported
-- ΙΔΙΩΤΙΚΟ → internal
-- Default = private
+## EN
 
-Modules reside in:
 
-```
-modules/
-```
+FROM math IMPORT SQUARE
 
-Nested modules allowed.
-
-No dynamic loading.
-No absolute path imports.
 
 ---
 
-# 13. Error Model
+## Rules
+
+- Static loading only  
+- No dynamic import  
+- Namespace-based access  
+
+---
+
+# 16. Error Model
 
 ELLI produces explicit errors:
 
-- TypeError
-- NameError
-- KeyError
-- ModuleError
-- SyntaxError
-
-No silent failure.
-
----
-
-# 14. Language Guarantees
-
-ELLI 1.x guarantees:
-
-- Stable syntax
-- Strict typing
-- Deterministic execution
-- Modular structure
-- Backward compatibility
-
----
-
-# 15. English Edition
-
-All keywords may exist in English form while preserving the same grammar and AST.
-
-Example (EN Edition):
-
-```
-DECLARE message AS TEXT = "Hello"
-PRINT: message
-```
-
-Both EL and EN editions behave identically.
+- TypeError  
+- NameError  
+- SyntaxError  
+- KeyError  
 
 ---
 
 # Final Note
 
 ELLI is strict by design.
-It favors clarity, determinism, and structural integrity over convenience.
 
-This reference is intended as a stable foundation for Version 1.x.
+It prioritizes:
 
-**ELLI Programming Language – Complete Language Reference**
+- clarity  
+- determinism  
+- structural consistency  
 
+---
+
+**ELLI Programming Language – Reference Guide**

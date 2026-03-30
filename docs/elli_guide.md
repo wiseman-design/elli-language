@@ -6,172 +6,303 @@
 
 # Installation
 
-ELLI is currently distributed as a language specification and reference implementation.
+ELLI is distributed as a language specification with a reference runtime.
 
 ## Requirements
 
 - Supported operating system
-- ELLI interpreter or compiler (depending on distribution)
-- Project directory structure
+- ELLI runtime (interpreter)
+- Project directory
+
+---
 
 ## Basic Setup
 
-1. Install the ELLI runtime.
-2. Create a project directory.
+1. Install the ELLI runtime  
+2. Create a project folder  
 3. Add a main source file:
 
-```
+
 main.elli
-```
 
-4. (Optional) Create a modules directory for modular projects:
 
-```
+4. (Optional) Create a modules directory:
+
+
 modules/
-```
+
 
 ---
 
 # Getting Started
 
-A minimal ELLI program:
+## Minimal Program
 
-```
+### EL
+
+
 ΔΗΛΩΣΕ μήνυμα ΩΣ ΚΕΙΜΕΝΟ = "Hello, ELLI"
 ΕΜΦΑΝΙΣΕ: μήνυμα
-```
 
-Run using the ELLI runtime:
 
-```
+### EN
+
+
+DECLARE message AS TEXT = "Hello, ELLI"
+DISPLAY: message
+
+
+---
+
+## Run Program
+
+
 elli main.elli
-```
 
-ELLI requires explicit type declarations and strict structure.
 
 ---
 
-# Example Program (Modular)
+# Core Rules
 
-## Project Structure
-
-```
-project/
-│
-├── main.elli
-└── modules/
-    └── math.elli
-```
-
-## modules/math.elli
-
-```
-ΔΗΜΟΣΙΟ ΣΤΑΘΕΡΑ PI ΩΣ ΔΕΚΑΔΙΚΟΣ = 3.14159
-
-ΔΗΜΟΣΙΟ ΣΥΝΑΡΤΗΣΗ ΤΕΤΡΑΓΩΝΟ(x):
-    ΕΠΙΣΤΡΕΨΕ x * x
-ΤΕΛΟΣ_ΣΥΝΑΡΤΗΣΗ
-```
-
-## main.elli
-
-```
-ΕΙΣΑΓΕ math
-
-ΕΜΦΑΝΙΣΕ: math.PI
-ΕΜΦΑΝΙΣΕ: math.ΤΕΤΡΑΓΩΝΟ(4)
-```
+- All variables must be declared with a type  
+- No type inference  
+- No implicit conversions (except text concatenation)  
+- All blocks must close explicitly  
+- Conditions must evaluate to BOOLEAN / ΛΟΓΙΚΟΣ  
 
 ---
 
-# Project Structure Guidelines
+# Project Structure
 
-Recommended layout for scalable applications:
+Recommended layout:
 
-```
+
 project/
 │
 ├── main.elli
 ├── modules/
-│   ├── core/
-│   ├── ai/
-│   └── utils/
+│ └── math.elli
 └── tests/
-```
 
-Rules:
 
-- All reusable components belong in `modules/`
-- Avoid circular dependencies
-- Use visibility modifiers (ΔΗΜΟΣΙΟ / ΙΔΙΩΤΙΚΟ)
-- Keep public APIs minimal and intentional
+---
+
+# Modular Example
+
+## modules/math.elli
+
+### EL
+
+
+ΣΤΑΘΕΡΑ PI ΩΣ ΔΕΚΑΔΙΚΟΣ = 3.14159
+
+ΔΗΛΩΣΕ ΤΕΤΡΑΓΩΝΟ ΩΣ ΣΥΝΑΡΤΗΣΗ(x):
+ΕΠΙΣΤΡΕΨΕ x * x
+ΤΕΛΟΣ_ΣΥΝΑΡΤΗΣΗ
+
+
+### EN
+
+
+CONST PI AS DECIMAL = 3.14159
+
+DECLARE SQUARE AS FUNCTION(x):
+RETURN x * x
+END_FUNCTION
+
+
+---
+
+## main.elli
+
+### EL
+
+
+ΕΙΣΑΓΕ math
+
+ΕΜΦΑΝΙΣΕ: math.PI
+ΕΜΦΑΝΙΣΕ: math.ΤΕΤΡΑΓΩΝΟ(4)
+
+
+### EN
+
+
+IMPORT math
+
+DISPLAY: math.PI
+DISPLAY: math.SQUARE(4)
+
+
+---
+
+# Modules
+
+- Modules are loaded statically before execution  
+- Access is performed through namespace (`module.element`)  
+- No dynamic import is supported  
+
+---
+
+# JSON Example (CORE 1.1)
+
+### EL
+
+
+ΔΗΛΩΣΕ δεδομένα ΩΣ ΔΟΜΗ = JSON.ΑΠΟ_ΚΕΙΜΕΝΟ(text)
+
+
+### EN
+
+
+DECLARE data AS STRUCT = JSON.FROM_TEXT(text)
+
+
+---
+
+⚠️ The declared type must match the actual JSON structure.
+
+Mismatch → TypeError
+
+---
+
+# File Example (CORE 1.1)
+
+### EL
+
+
+ΔΗΛΩΣΕ περιεχόμενο ΩΣ ΚΕΙΜΕΝΟ = ΑΡΧΕΙΟ.ΑΝΑΓΝΩΣΕ("data.txt")
+
+
+### EN
+
+
+DECLARE content AS TEXT = FILE.READ("data.txt")
+
+
+---
+
+# HTTP Example (CORE 1.1)
+
+### EL
+
+
+ΔΗΛΩΣΕ απάντηση ΩΣ HTTP_ΑΠΑΝΤΗΣΗ = HTTP.GET("https://example.com
+")
+ΔΗΛΩΣΕ κωδικός ΩΣ ΑΡΙΘΜΟΣ = HTTP.ΚΩΔΙΚΟΣ(απάντηση)
+
+
+### EN
+
+
+DECLARE response AS HTTP_RESPONSE = HTTP.GET("https://example.com
+")
+DECLARE status AS NUMBER = HTTP.STATUS(response)
+
+
+---
+
+# ΔΟΜΗ Example (CORE 1.2)
+
+### EL
+
+
+ΔΗΛΩΣΕ χρήστης ΩΣ ΔΟΜΗ = {
+"όνομα": "Νίκος",
+"ηλικία": 25
+}
+
+
+### EN
+
+
+DECLARE user AS STRUCT = {
+"name": "Nick",
+"age": 25
+}
+
+
+---
+
+# Development Guidelines
+
+- Keep logic inside modules  
+- Keep main file minimal  
+- Avoid circular dependencies  
+- Use clear naming  
 
 ---
 
 # Contributing
 
-ELLI is designed for disciplined growth.
+ELLI evolves through structured contributions.
 
-## Contribution Principles
+## Principles
 
-1. Do not modify CORE philosophy lightly.
-2. Maintain backward compatibility within 1.x.
-3. Avoid implicit behavior proposals.
-4. Prefer modular extensions over core changes.
-
-## Submitting Proposals
-
-Proposals should include:
-
-- Motivation
-- Architectural impact analysis
-- Backward compatibility assessment
-- Example usage
-
-Core-breaking proposals are considered for 2.0.
+1. Respect CORE philosophy  
+2. Maintain compatibility  
+3. Avoid implicit behavior  
+4. Prefer modules over core changes  
 
 ---
 
-# Roadmap (High-Level)
+## Proposal Requirements
+
+- Motivation  
+- Design explanation  
+- Compatibility analysis  
+- Example usage  
+
+---
+
+# Roadmap
 
 ## Short-Term
 
-- Stabilize CORE 1.x
-- Improve tooling
-- Expand documentation
+- CORE stabilization  
+- Tooling improvements  
+- Documentation expansion  
+
+---
 
 ## Mid-Term
 
-- Formal module manifest system
-- Dependency resolution model
-- Standardized library packaging
+- Module structuring improvements  
+- Dependency handling  
+
+---
 
 ## Long-Term
 
-- Optional compilation targets
-- Performance optimization layer
-- Systems-level integration capabilities
+- Compilation targets  
+- Performance improvements  
 
 ---
 
 # Design Guarantees
 
-ELLI 1.x guarantees:
+ELLI guarantees:
 
-- Stable syntax
-- Stable type system
-- Deterministic execution model
-- Explicit modular boundaries
-- Backward compatibility across minor versions
+- Deterministic execution  
+- Strict typing  
+- Explicit syntax  
+- Stable CORE  
 
-ELLI does not guarantee:
+---
 
-- Feature expansion without architectural review
-- Dynamic typing support
-- Implicit runtime flexibility
+ELLI does NOT support:
+
+- Dynamic typing  
+- Implicit conversions  
+- Runtime module loading  
+- Hidden execution behavior  
+
+---
+
+# Final Note
+
+ELLI is designed for clarity, predictability, and long-term stability.
 
 ---
 
 **ELLI Programming Language**  
 Usage & Ecosystem Guide
-
