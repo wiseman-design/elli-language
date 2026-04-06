@@ -131,6 +131,40 @@ D:\elli
 
 ELLI v1.0.0 is the first stable public foundation of the language. The goal of this release is not to provide a huge ecosystem yet, but to provide a clean, strict, well-documented base that can grow without breaking its philosophy.
 
+## 📬 Contact & Community
+
+If you want to get in touch, ask questions, or follow the development of ELLI, you can use the following:
+
+### 📧 Email
+elli.language.dev@gmail.com
+
+For:
+- general questions
+- feedback
+- collaboration inquiries
+
+---
+
+### 💬 GitHub Discussions
+Use Discussions for:
+- ideas
+- questions
+- design conversations
+- language proposals
+
+---
+
+### 🐛 GitHub Issues
+Use Issues for:
+- bug reports
+- unexpected behavior
+- runtime or parser problems
+
+Please include:
+- a minimal reproducible example
+- the ELLI edition (EL / EN)
+- expected vs actual behavior
+
 ## License
 
 This project is licensed under the MIT License.
