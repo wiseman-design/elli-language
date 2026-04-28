@@ -78,6 +78,7 @@ Core specification PDFs:
 - `ELLI Core 1.1.pdf`
 - `ELLI Core 1.2.pdf`
 - `ELLI Core 1.3.pdf`
+- `ELLI Core 1.4.pdf`
 
 ## Which tests to run first
 
