@@ -143,6 +143,51 @@ DISPLAY: math.SQUARE(4)
 
 ---
 
+# Iteration (CORE 1.4)
+
+ELLI supports two loop modes:
+
+## Numeric Loop (CORE 1.0)
+
+FOR i FROM 1 TO 5:
+    ...
+
+## Collection Loop (CORE 1.4)
+
+FOR x IN list THEN:
+    ...
+
+---
+
+## Rules
+
+- Collection loop requires LIST
+- Iteration variable is implicit
+- Scope is limited to loop
+- Type follows list elements
+
+---
+
+# Loop Control
+
+LOOP_BREAK terminates the nearest loop.
+
+---
+
+# Math Namespace
+
+Available globally:
+
+- MATH.SQUARE(x)
+- MATH.SQRT(x)
+- MATH.ABS(x)
+- MATH.MIN(a, b)
+- MATH.MAX(a, b)
+
+No import required.
+
+---
+
 # JSON Example (CORE 1.1)
 
 ### EL

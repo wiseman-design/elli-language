@@ -29,6 +29,7 @@ EL_KEYWORDS = {
     "ΤΕΛΟΣ_ΣΥΝΑΡΤΗΣΗ": TokenType.END_FUNCTION,
     "ΕΠΙΣΤΡΕΨΕ": TokenType.RETURN,
     "ΔΙΑΚΟΨΕ": TokenType.BREAK,
+    "ΔΙΑΚΟΠΗ": TokenType.LOOP_BREAK,
     "ΤΕΡΜΑΤΙΣΕ": TokenType.TERMINATE,
     "ΚΑΙ": TokenType.AND,
     "Ή": TokenType.OR,
@@ -40,5 +41,6 @@ EL_KEYWORDS = {
     "HTTP_ΑΠΑΝΤΗΣΗ": TokenType.HTTP_RESPONSE_TYPE,
     "ΣΤΑΘΕΡΑ": TokenType.CONSTANT,
     "ΕΙΣΑΓΕ": TokenType.IMPORT,
-    "ΣΧΟΛΙΟ": TokenType.COMMENT
+    "ΣΧΟΛΙΟ": TokenType.COMMENT,
+    "ΣΕ": TokenType.IN
 }

@@ -124,6 +124,7 @@ class ExpressionParser:
     # unary -> primary
     def unary(self):
 
+        # NOT (ΟΧΙ)
         if (
             self.current_token
             and self.current_token.type == TokenType.KEYWORD
@@ -132,6 +133,12 @@ class ExpressionParser:
             self.advance()
             expr = self.unary()
             return NotNode(expr)
+
+        # 🔥 NEW: Unary minus
+        if self.current_token and self.current_token.type == TokenType.MINUS:
+            self.advance()
+            expr = self.unary()
+            return BinOpNode(NumberNode(0), TokenType.MINUS, expr)
 
         return self.primary()
 

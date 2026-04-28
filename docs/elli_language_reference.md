@@ -1,6 +1,6 @@
 # ELLI Programming Language
 
-## Complete Language Reference (CORE 1.0 – 1.3)
+## Complete Language Reference (CORE 1.0 – 1.4)
 
 This document defines the practical usage of the ELLI language based on the stable CORE specification.
 
@@ -458,5 +458,71 @@ It prioritizes:
 - structural consistency  
 
 ---
+
+# 17. Advanced Iteration (CORE 1.4)
+
+## Collection Loop
+
+## EL
+
+ΓΙΑ x ΣΕ λίστα ΤΟΤΕ:
+    ΕΜΦΑΝΙΣΕ: x
+ΤΕΛΟΣ_ΓΙΑ
+
+
+## EN
+
+FOR x IN list THEN:
+    DISPLAY: x
+END_FOR
+
+
+## Rules
+
+- Iteration variable is implicitly created
+- Variable scope is limited to the loop
+- Type is derived from the collection
+- Only LIST is supported as iteration source
+- No implicit type conversions
+
+---
+
+## Loop Control
+
+## EL
+
+ΔΙΑΚΟΠΗ
+
+
+## EN
+
+LOOP_BREAK
+
+
+## Rules
+
+- Terminates nearest loop
+- Not allowed outside loop
+- Does not affect outer blocks
+
+---
+
+## Math Namespace (CORE 1.4)
+
+Available without import.
+
+## Functions
+
+- ΜΑΘ.ΤΕΤΡΑΓΩΝΟ / MATH.SQUARE
+- ΜΑΘ.ΡΙΖΑ / MATH.SQRT
+- ΜΑΘ.ΑΠΟΛΥΤΗ / MATH.ABS
+- ΜΑΘ.ΕΛΑΧΙΣΤΟ / MATH.MIN
+- ΜΑΘ.ΜΕΓΙΣΤΟ / MATH.MAX
+
+## Rules
+
+- Accept only numeric types
+- Invalid type → TypeError
+- No implicit conversions
 
 **ELLI Programming Language – Reference Guide**

@@ -20,6 +20,7 @@ The language is defined through a stable CORE specification:
 - **CORE 1.1** – Infrastructure extensions (File, JSON, HTTP)  
 - **CORE 1.2** – Structured container type (ΔΟΜΗ / STRUCT)  
 - **CORE 1.3** – Module system, CORE/STD architecture separation  
+- **CORE 1.4** – Advanced iteration model and mathematical namespace
 
 ELLI is designed to grow without losing structural integrity.
 
@@ -129,6 +130,22 @@ The language foundation:
 - Module system  
 
 CORE is stable across 1.x versions.
+
+---
+
+## CORE 1.4 Extensions
+
+CORE 1.4 introduces controlled iteration enhancements and mathematical operations
+while preserving the strict execution model and type system.
+
+Additions include:
+
+- Collection-based iteration (FOR EACH / ΓΙΑ ΣΕ)
+- Loop control separation (ΔΙΑΚΟΠΗ vs ΔΙΑΚΟΨΕ)
+- Mathematical namespace (ΜΑΘ / MATH)
+- Implicit loop variable with strict type binding
+
+CORE 1.4 does not introduce type inference and does not modify existing structures.
 
 ---
 

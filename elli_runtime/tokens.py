@@ -73,6 +73,7 @@ class TokenType(Enum):
     END_IF = auto()
 
     FOR = auto()
+    IN = auto()
     TO = auto()
     END_FOR = auto()
 
@@ -84,6 +85,7 @@ class TokenType(Enum):
 
     RETURN = auto()
     BREAK = auto()
+    LOOP_BREAK = auto()
     TERMINATE = auto()
 
     AND = auto()

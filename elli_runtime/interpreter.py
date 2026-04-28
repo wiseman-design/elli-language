@@ -9,7 +9,8 @@ from .errors import (
     ELLITypeError,
     ELLIZeroDivisionError,
     ELLIBlockError,
-    ELLIError
+    ELLIError,
+    ELLISyntaxError
 )
 from elli_runtime import errors
 
@@ -338,6 +339,39 @@ class Interpreter:
         finally:
             self.loop_depth -= 1
 
+    def visit_ForEachNode(self, node):
+        collection = self.visit(node.collection)
+
+        if not isinstance(collection, list):
+            raise ELLITypeError(
+                0,
+                "ΛΙΣΤΑ",
+                self.get_elli_type(collection)
+            )
+
+        self.loop_depth += 1
+
+        try:
+            for item in collection:
+
+                self.scopes.append({})
+                self.scopes[-1][node.var_name] = {
+                    "type": self.get_elli_type(item),
+                    "value": item
+                }
+
+                try:
+                    for stmt in node.body:
+                        self.visit(stmt)
+                except LoopBreak:
+                    self.scopes.pop()
+                    break
+
+                self.scopes.pop()
+
+        finally:
+            self.loop_depth -= 1
+
     # ---- If / Else ----
     def visit_IfNode(self, node):
 
@@ -592,6 +626,17 @@ class Interpreter:
                 0,
                 message
             )
+        raise LoopBreak()
+
+    def visit_LoopBreakNode(self, node):
+        if self.loop_depth == 0:
+            raise ELLISyntaxError(
+                0,
+                "Η ΔΙΑΚΟΠΗ επιτρέπεται μόνο μέσα σε loop"
+                if errors.CURRENT_EDITION != "EN"
+                else "LOOP_BREAK is only allowed inside a loop"
+            )
+
         raise LoopBreak()
 
     def visit_TerminateNode(self, node):
@@ -999,6 +1044,77 @@ class Interpreter:
                         )
 
                 return keys
+
+        # ---- MATH NAMESPACE ----
+        elif namespace in ("ΜΑΘ", "MATH"):
+
+            # ΤΕΤΡΑΓΩΝΟ / SQUARE
+            if function in ("ΤΕΤΡΑΓΩΝΟ", "SQUARE"):
+                if len(args) != 1:
+                    raise ELLIError("ΣΦΑΛΜΑ_ΣΥΝΤΑΞΗΣ", 0, "Η ΤΕΤΡΑΓΩΝΟ απαιτεί 1 όρισμα")
+
+                value = args[0]
+                if self.get_elli_type(value) not in ("ΑΡΙΘΜΟΣ", "ΑΚΕΡΑΙΟΣ", "ΔΕΚΑΔΙΚΟΣ"):
+                    raise ELLITypeError(0, "ΑΡΙΘΜΟΣ", self.get_elli_type(value))
+
+                return value * value
+            
+            # ΡΙΖΑ / SQRT
+            if function in ("ΡΙΖΑ", "SQRT"):
+                if len(args) != 1:
+                    raise ELLIError("ΣΦΑΛΜΑ_ΣΥΝΤΑΞΗΣ", 0, "Η ΡΙΖΑ απαιτεί 1 όρισμα")
+
+                value = args[0]
+                if self.get_elli_type(value) not in ("ΑΡΙΘΜΟΣ", "ΑΚΕΡΑΙΟΣ", "ΔΕΚΑΔΙΚΟΣ"):
+                    raise ELLITypeError(0, "ΑΡΙΘΜΟΣ", self.get_elli_type(value))
+
+                import math
+                return math.sqrt(value)
+            
+            #ΕΛΑΧΙΣΤΟ / MIN
+            if function in ("ΕΛΑΧΙΣΤΟ", "MIN"):
+                if len(args) != 2:
+                    raise ELLIError("ΣΦΑΛΜΑ_ΣΥΝΤΑΞΗΣ", 0, "Η ΕΛΑΧΙΣΤΟ απαιτεί 2 ορίσματα")
+
+                a, b = args
+
+                if self.get_elli_type(a) not in ("ΑΡΙΘΜΟΣ", "ΑΚΕΡΑΙΟΣ", "ΔΕΚΑΔΙΚΟΣ"):
+                    raise ELLITypeError(0, "ΑΡΙΘΜΟΣ", self.get_elli_type(a))
+
+                if self.get_elli_type(b) not in ("ΑΡΙΘΜΟΣ", "ΑΚΕΡΑΙΟΣ", "ΔΕΚΑΔΙΚΟΣ"):
+                    raise ELLITypeError(0, "ΑΡΙΘΜΟΣ", self.get_elli_type(b))
+
+                return min(a, b)
+            
+            #ΜΕΓΙΣΤΟ / MAX
+            if function in ("ΜΕΓΙΣΤΟ", "MAX"):
+                if len(args) != 2:
+                    raise ELLIError("ΣΦΑΛΜΑ_ΣΥΝΤΑΞΗΣ", 0, "Η ΜΕΓΙΣΤΟ απαιτεί 2 ορίσματα")
+
+                a, b = args
+
+                if self.get_elli_type(a) not in ("ΑΡΙΘΜΟΣ", "ΑΚΕΡΑΙΟΣ", "ΔΕΚΑΔΙΚΟΣ"):
+                    raise ELLITypeError(0, "ΑΡΙΘΜΟΣ", self.get_elli_type(a))
+
+                if self.get_elli_type(b) not in ("ΑΡΙΘΜΟΣ", "ΑΚΕΡΑΙΟΣ", "ΔΕΚΑΔΙΚΟΣ"):
+                    raise ELLITypeError(0, "ΑΡΙΘΜΟΣ", self.get_elli_type(b))
+
+                if errors.CURRENT_EDITION == "EN":
+                    return max(a, b)
+                else:
+                    return max(a, b)
+                
+            # ΑΠΟΛΥΤΗ / ABS
+            if function in ("ΑΠΟΛΥΤΗ", "ABS"):
+                if len(args) != 1:
+                    raise ELLIError("ΣΦΑΛΜΑ_ΣΥΝΤΑΞΗΣ", 0, "Η ΑΠΟΛΥΤΗ απαιτεί 1 όρισμα")
+
+                value = args[0]
+
+                if self.get_elli_type(value) not in ("ΑΡΙΘΜΟΣ", "ΑΚΕΡΑΙΟΣ", "ΔΕΚΑΔΙΚΟΣ"):
+                    raise ELLITypeError(0, "ΑΡΙΘΜΟΣ", self.get_elli_type(value))
+
+                return abs(value)
             
         # Unknown namespace
         if errors.CURRENT_EDITION == "EN":

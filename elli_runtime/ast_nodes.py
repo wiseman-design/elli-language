@@ -175,3 +175,12 @@ class FromImportNode(Node):
     def __init__(self, module_name, element_name):
         self.module_name = module_name
         self.element_name = element_name
+
+class ForEachNode:
+    def __init__(self, var_name, collection, body):
+        self.var_name = var_name
+        self.collection = collection
+        self.body = body
+
+class LoopBreakNode:
+    pass

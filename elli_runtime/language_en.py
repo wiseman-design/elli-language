@@ -29,6 +29,7 @@ EN_KEYWORDS = {
     "END_FUNCTION": TokenType.END_FUNCTION,
     "RETURN": TokenType.RETURN,
     "BREAK": TokenType.BREAK,
+    "LOOP_BREAK": TokenType.LOOP_BREAK,
     "TERMINATE": TokenType.TERMINATE,
     "AND": TokenType.AND,
     "OR": TokenType.OR,
@@ -40,5 +41,6 @@ EN_KEYWORDS = {
     "HTTP_RESPONSE": TokenType.HTTP_RESPONSE_TYPE,
     "CONST": TokenType.CONSTANT,
     "IMPORT": TokenType.IMPORT,
-    "COMMENT": TokenType.COMMENT
+    "COMMENT": TokenType.COMMENT,
+    "IN": TokenType.IN
 }

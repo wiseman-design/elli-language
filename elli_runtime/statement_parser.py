@@ -71,6 +71,10 @@ class StatementParser:
             self.eat(TokenType.BREAK)
             return BreakNode()
         
+        if self.current_token.type == TokenType.LOOP_BREAK:
+            self.advance()
+            return LoopBreakNode()
+        
         if self.current_token.type == TokenType.CONSTANT:
             return self.parse_const_decl()
         
@@ -355,7 +359,32 @@ class StatementParser:
         var_name = self.current_token.value
         self.eat(TokenType.IDENTIFIER)
 
-        # ΑΠΟ
+        # --- CORE 1.4: FOR EACH ---
+        if self.current_token.type == TokenType.IN:
+            self.eat(TokenType.IN)
+
+            expr_parser = ExpressionParser(self.tokens[self.pos:])
+            collection = expr_parser.parse()
+
+            self.pos += expr_parser.consumed
+            self.current_token = self.tokens[self.pos]
+
+            self.eat(TokenType.THEN)
+            self.eat(TokenType.COLON)
+
+            body = self.parse_block()
+
+            if not self.current_token or self.current_token.type != TokenType.END_FOR:
+                raise ELLISyntaxError(
+                    self.current_token.line if self.current_token else -1,
+                    "Expected keyword 'END_FOR'" if errors.CURRENT_EDITION == "EN" else "Αναμενόταν η λέξη-κλειδί 'ΤΕΛΟΣ_ΓΙΑ'"
+                )
+
+            self.eat(TokenType.END_FOR)
+
+            return ForEachNode(var_name, collection, body)
+
+        # ΑΠΟ --- CORE 1.0 ---
         if self.current_token.type != TokenType.FROM:
             raise ELLISyntaxError(
                 self.current_token.line,
