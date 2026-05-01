@@ -12,11 +12,11 @@ ELLI is a programming language built around:
 - bilingual keyword editions (EL / EN)
 - a stable CORE that grows through compatible extensions
 
-Its current public core is defined through CORE 1.0, 1.1, 1.2, and 1.3. These documents define the language syntax, type system, infrastructure namespaces, structured data, constants, and module architecture. fileciteturn3file0 fileciteturn3file1 fileciteturn3file2 fileciteturn3file3
+Its current public core is defined through CORE 1.0, 1.1, 1.2, 1.3, and 1.4. These documents define the language syntax, type system, infrastructure namespaces, structured data, constants, and module architecture. fileciteturn3file0 fileciteturn3file1 fileciteturn3file2 fileciteturn3file3
 
-## What ELLI supports up to v1.0.0
+## What ELLI supports up to v1.1.0
 
-Version 1.0.0 includes the stable CORE 1.x foundation:
+Version 1.1.0 includes the stable CORE 1.0-1.4 foundation:
 
 - strict variable declarations with explicit types
 - explicit block endings and indentation rules
@@ -25,7 +25,11 @@ Version 1.0.0 includes the stable CORE 1.x foundation:
 - `ΑΡΧΕΙΟ`, `JSON`, and `HTTP` namespaces
 - constants with `ΣΤΑΘΕΡΑ`
 - module system with namespace access and selective import
-- EL and EN language editions with the same internal behavior and AST model fileciteturn3file0 fileciteturn3file1 fileciteturn3file2 fileciteturn3file3
+- EL and EN language editions with the same internal behavior and AST model 
+- collection-based iteration (FOR EACH / IN)
+- loop control with LOOP_BREAK / ΔΙΑΚΟΠΗ
+- built-in mathematical namespace (MATH / ΜΑΘ)
+fileciteturn3file0 fileciteturn3file1 fileciteturn3file2 fileciteturn3file3
 
 ## How to run a `.elli` file
 
@@ -128,9 +132,9 @@ D:\elli
     │ test_en_2.elli
 ```
 
-## Version 1.0.0 focus
+## Version 1.1.0 focus
 
-ELLI v1.0.0 is the first stable public foundation of the language. The goal of this release is not to provide a huge ecosystem yet, but to provide a clean, strict, well-documented base that can grow without breaking its philosophy.
+ELLI v1.1.0 builds on the stable CORE 1.0–1.4 foundation and represents the first fully extended version of the language. The goal of this release is not to provide a huge ecosystem yet, but to provide a clean, strict, well-documented base that can grow without breaking its philosophy.
 
 ## 📬 Contact & Community
 
